@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { haggadahText } from '../../content/haggadah';
 import SectionText from '../../components/SectionText';
+import { sectionTextProps } from '../../content/sectionHelper';
 import WineCup from '../../components/WineCup';
 
 export default function SecondCup() {
@@ -26,13 +27,7 @@ export default function SecondCup() {
         </div>
       )}
 
-      <SectionText
-        instructions={section.instruction}
-        blessingHebrew={section.blessingHebrew}
-        blessing={section.blessing}
-        blessingEnglish={section.blessingEnglish}
-        body={section.content.join('\n\n')}
-      />
+      <SectionText {...sectionTextProps(section)} />
     </motion.div>
   );
 }

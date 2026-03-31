@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 import SectionImage from '../components/SectionImage';
 export default function Karpas() {
   const section = haggadahText['karpas'];
@@ -137,12 +138,7 @@ export default function Karpas() {
       </motion.div>
 
       <SectionImage src="/images/generated/karpas.png" alt="Karpas dipping in salt water" />
-      <SectionText
-        instructions={section.instruction}
-        blessingHebrew={section.blessingHebrew}
-        blessing={section.blessing}
-        body={section.content.join('\n\n')}
-      />
+      <SectionText {...sectionTextProps(section)} />
     </motion.div>
   );
 }

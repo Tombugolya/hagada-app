@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 
 const foods = ['🥚', '🍖', '🥗', '🍲', '🥘', '🍷'];
 
@@ -31,11 +32,7 @@ export default function ShulchanOrech() {
         ))}
       </motion.div>
 
-      <SectionText
-        instructions={section.instruction}
-        body={section.content.join('\n\n')}
-        commentary={section.commentary}
-      />
+      <SectionText {...sectionTextProps(section)} />
     </div>
   );
 }

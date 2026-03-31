@@ -12,14 +12,23 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
+function getLangFromURL(): Lang {
+  const params = new URLSearchParams(window.location.search);
+  const lang = params.get('lang');
+  return lang === 'he' ? 'he' : 'en';
+}
+
+function setLangInURL(lang: Lang) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('lang', lang);
+  window.history.replaceState({}, '', url.toString());
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    const saved = localStorage.getItem('haggadah-lang');
-    return (saved === 'he' || saved === 'en') ? saved : 'en';
-  });
+  const [lang, setLangState] = useState<Lang>(getLangFromURL);
 
   useEffect(() => {
-    localStorage.setItem('haggadah-lang', lang);
+    setLangInURL(lang);
     document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
   }, [lang]);

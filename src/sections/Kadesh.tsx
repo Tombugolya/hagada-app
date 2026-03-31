@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
 import SectionImage from '../components/SectionImage';
+import { sectionTextProps } from '../content/sectionHelper';
 
 export default function Kadesh() {
   const section = haggadahText['kadesh'];
@@ -150,12 +151,7 @@ export default function Kadesh() {
             transition={{ duration: 0.8 }}
           >
             <SectionImage src="/images/generated/kadesh.png" alt="Kiddush cup and Seder table" />
-            <SectionText
-              instructions={section.instruction}
-              blessingHebrew={section.blessingHebrew}
-              blessing={section.blessing}
-              body={section.content.join('\n\n')}
-            />
+            <SectionText {...sectionTextProps(section)} />
           </motion.div>
         )}
       </AnimatePresence>

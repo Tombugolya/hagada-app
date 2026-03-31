@@ -75,10 +75,9 @@ function PageNav({
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-midnight/90 backdrop-blur-md border-t border-gold/10 safe-bottom">
-      <div className="h-0.5 bg-white/5">
+      <div className="h-0.5 bg-white/5" style={{ direction: isHebrew ? 'rtl' : 'ltr' }}>
         <motion.div
-          className="h-full bg-gold/60 origin-left"
-          style={{ direction: 'ltr' }}
+          className={`h-full bg-gold/60 ${isHebrew ? 'origin-right' : 'origin-left'}`}
           animate={{ width: `${progress * 100}%` }}
           transition={{ type: 'spring', damping: 20 }}
         />

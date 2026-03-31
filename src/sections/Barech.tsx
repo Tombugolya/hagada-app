@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 import WineCup from '../components/WineCup';
 import SectionImage from '../components/SectionImage';
 
@@ -16,14 +17,7 @@ export default function Barech() {
         <WineCup size={100} fillPercent={100} />
       </div>
 
-      <SectionText
-        instructions={section.instruction}
-        blessingHebrew={section.blessingHebrew}
-        blessing={section.blessing}
-        blessingEnglish={section.blessingEnglish}
-        body={section.content.join('\n\n')}
-        commentary={section.commentary}
-      />
+      <SectionText {...sectionTextProps(section)} />
 
       {/* Cup of Elijah and door */}
       <motion.div

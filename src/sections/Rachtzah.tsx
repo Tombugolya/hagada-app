@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 
 export default function Rachtzah() {
   const section = haggadahText['rachtzah'];
@@ -28,13 +29,7 @@ export default function Rachtzah() {
         </div>
       </motion.div>
 
-      <SectionText
-        instructions={section.instruction}
-        blessingHebrew={section.blessingHebrew}
-        blessing={section.blessing}
-        blessingEnglish={section.blessingEnglish}
-        body={section.content.join('\n\n')}
-      />
+      <SectionText {...sectionTextProps(section)} />
     </div>
   );
 }

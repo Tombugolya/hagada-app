@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 import { useSoundEffect } from '../hooks/useSoundEffect';
 
 export default function Yachatz() {
@@ -86,11 +87,7 @@ export default function Yachatz() {
         </div>
       </motion.div>
 
-      <SectionText
-        instructions={section.instruction}
-        body={section.content.join('\n\n')}
-        commentary={section.commentary}
-      />
+      <SectionText {...sectionTextProps(section)} />
     </div>
   );
 }

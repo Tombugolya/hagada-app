@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 interface Droplet {
   id: number;
   x: number;
@@ -185,10 +186,7 @@ export default function Urchatz() {
         animate={{ opacity: washComplete ? 1 : 0.4, y: 0 }}
         transition={{ delay: 0.6, duration: 0.6 }}
       >
-        <SectionText
-          instructions={section.instruction}
-          body={section.content.join('\n\n')}
-        />
+        <SectionText {...sectionTextProps(section)} />
       </motion.div>
     </motion.div>
   );

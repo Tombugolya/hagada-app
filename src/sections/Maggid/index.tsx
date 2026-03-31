@@ -8,17 +8,14 @@ import PesachMatzahMaror from './PesachMatzahMaror';
 import SecondCup from './SecondCup';
 import { haggadahText } from '../../content/haggadah';
 import SectionText from '../../components/SectionText';
+import { sectionTextProps } from '../../content/sectionHelper';
 
 export default function Maggid() {
   const section = haggadahText['maggid'];
 
   return (
     <div className="space-y-24">
-      <SectionText
-        instructions={section.instruction}
-        body={section.content.join('\n\n')}
-        commentary={section.commentary}
-      />
+      <SectionText {...sectionTextProps(section)} />
       <HaLachmaAnya />
       <FourQuestions />
       <AvadimHayinu />

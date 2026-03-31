@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
+import { sectionTextProps } from '../content/sectionHelper';
 import WineCup from '../components/WineCup';
 import SectionImage from '../components/SectionImage';
 
@@ -63,14 +64,7 @@ export default function Hallel() {
       </motion.div>
 
       <div className="mt-8">
-        <SectionText
-          instructions={section.instruction}
-          blessingHebrew={section.blessingHebrew}
-          blessing={section.blessing}
-          blessingEnglish={section.blessingEnglish}
-          body=""
-          commentary={section.commentary}
-        />
+        <SectionText {...sectionTextProps(section)} body="" />
       </div>
     </div>
   );
