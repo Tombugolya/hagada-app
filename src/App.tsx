@@ -24,6 +24,7 @@ import Tzafun from './sections/Tzafun';
 import Barech from './sections/Barech';
 import Hallel from './sections/Hallel';
 import Nirtzah from './sections/Nirtzah';
+import Checklist from './sections/Checklist';
 
 const sectionComponents: Record<string, React.ComponentType> = {
   kadesh: Kadesh,
@@ -43,7 +44,8 @@ const sectionComponents: Record<string, React.ComponentType> = {
   nirtzah: Nirtzah,
 };
 
-const TOTAL_PAGES = sederSteps.length + 2;
+// page 0 = hero, page 1 = checklist, pages 2-16 = seder steps, page 17 = footer
+const TOTAL_PAGES = sederSteps.length + 3;
 
 const pageVariants = {
   enter: (direction: number) => ({
@@ -64,12 +66,12 @@ function PageNav({
   page: number;
   setPage: (p: number, dir: number) => void;
 }) {
-  const stepIndex = page - 1;
-  const step = sederSteps[stepIndex];
+  const stepIndex = page - 2; // page 0=hero, 1=checklist, 2+=seder steps
+  const step = stepIndex >= 0 ? sederSteps[stepIndex] : undefined;
   const { isHebrew } = useLanguage();
   const progress = page / (TOTAL_PAGES - 1);
+  const isChecklist = page === 1;
 
-  // In RTL, arrows flip
   const backArrow = isHebrew ? '→' : '←';
   const nextArrow = isHebrew ? '←' : '→';
 
@@ -106,6 +108,8 @@ function PageNav({
                 </p>
                 <p className="text-parchment/30 text-xs">{step.number} {t('nav.stepOf')}</p>
               </div>
+            ) : isChecklist ? (
+              <p className="text-gold text-base font-display">📋 {isHebrew ? 'הכנות' : 'Checklist'}</p>
             ) : page === 0 ? (
               <p className="text-parchment/40 text-sm">{t('nav.haggadah')}</p>
             ) : (
@@ -123,7 +127,11 @@ function PageNav({
                     ? 'w-6 h-2 bg-gold'
                     : 'w-2 h-2 bg-white/15 hover:bg-white/30'
                 }`}
-                title={i === 0 ? 'Home' : i <= sederSteps.length ? sederSteps[i - 1].transliteration : 'End'}
+                title={
+                  i === 0 ? 'Home' :
+                  i === 1 ? 'Checklist' :
+                  i <= sederSteps.length + 1 ? sederSteps[i - 2].transliteration : 'End'
+                }
               />
             ))}
           </div>
@@ -198,8 +206,8 @@ function AppContent() {
     }
   }, [page, setPage]);
 
-  const stepIndex = page - 1;
-  const step = sederSteps[stepIndex];
+  const stepIndex = page - 2; // page 0=hero, 1=checklist, 2+=seder steps
+  const step = stepIndex >= 0 ? sederSteps[stepIndex] : undefined;
   const SectionComponent = step ? sectionComponents[step.id] : null;
 
   return (
@@ -247,6 +255,21 @@ function AppContent() {
               {t('hero.begin')}
             </motion.button>
           </motion.section>
+        )}
+
+        {page === 1 && (
+          <motion.div
+            key="checklist"
+            custom={direction}
+            variants={pageVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="relative z-10"
+          >
+            <Checklist />
+          </motion.div>
         )}
 
         {step && SectionComponent && (
