@@ -38,17 +38,17 @@ export default function SectionText({
   };
 
   return (
-    <div className={`max-w-2xl mx-auto space-y-4 sm:space-y-6 ${className}`}>
+    <div className={`max-w-2xl mx-auto space-y-5 ${className}`}>
       {/* Read Aloud / Stop button */}
       {readableText.trim() && (
         <div className="flex justify-end">
           <motion.button
             onClick={handleNarration}
             whileTap={{ scale: 0.95 }}
-            className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm transition-colors ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${
               narration.isPlaying
                 ? 'bg-gold text-midnight font-medium'
-                : 'bg-white/10 text-parchment/70 active:bg-white/20 hover:bg-white/15 hover:text-gold'
+                : 'bg-white/10 text-parchment/70 active:bg-white/20'
             }`}
           >
             <span>{narration.isPlaying ? '⏹' : '🔊'}</span>
@@ -62,7 +62,7 @@ export default function SectionText({
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-gold/80 italic text-base sm:text-lg border-l-2 border-gold/30 pl-3 sm:pl-4"
+          className="text-gold/80 italic text-lg border-l-2 border-gold/30 pl-4"
         >
           {instructions}
         </motion.div>
@@ -74,7 +74,7 @@ export default function SectionText({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="hebrew-text text-lg sm:text-2xl text-gold-light leading-relaxed py-3 sm:py-4 px-4 sm:px-6 rounded-lg bg-white/5 border border-gold/20"
+          className="hebrew-text text-xl md:text-2xl text-gold-light leading-relaxed py-3 px-4 sm:px-6 rounded-lg bg-white/5 border border-gold/20"
         >
           {blessingHebrew}
         </motion.div>
@@ -86,7 +86,7 @@ export default function SectionText({
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-parchment/70 italic text-sm sm:text-base"
+          className="text-parchment/70 italic text-base"
         >
           {blessing}
         </motion.p>
@@ -98,7 +98,7 @@ export default function SectionText({
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-parchment text-base sm:text-lg font-medium"
+          className="text-parchment text-lg font-medium"
         >
           {blessingEnglish}
         </motion.p>
@@ -109,7 +109,7 @@ export default function SectionText({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
-        className="text-parchment/90 text-base sm:text-xl leading-relaxed whitespace-pre-line font-serif"
+        className="text-parchment/90 text-lg md:text-xl leading-relaxed whitespace-pre-line font-serif"
       >
         {body}
       </motion.div>
@@ -120,9 +120,9 @@ export default function SectionText({
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="mt-4 sm:mt-6 p-3 sm:p-5 rounded-xl bg-gold/5 border border-gold/15 text-parchment/70 text-sm sm:text-base leading-relaxed"
+          className="mt-5 p-4 rounded-xl bg-gold/5 border border-gold/15 text-parchment/70 text-base leading-relaxed"
         >
-          <span className="text-gold font-display text-xs sm:text-sm tracking-wider uppercase block mb-1 sm:mb-2">Commentary</span>
+          <span className="text-gold font-display text-sm tracking-wider uppercase block mb-1">Commentary</span>
           {commentary}
         </motion.div>
       )}

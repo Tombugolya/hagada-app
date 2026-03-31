@@ -79,39 +79,39 @@ function PageNav({
         />
       </div>
 
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between">
+      <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
         {/* Back button */}
         <button
           onClick={() => setPage(page - 1, -1)}
           disabled={page === 0}
-          className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-sm transition-all min-w-[3rem] justify-center ${
+          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base transition-all min-w-[3.5rem] justify-center ${
             page === 0
               ? 'opacity-0 pointer-events-none'
               : 'bg-white/5 text-parchment/70 active:bg-white/15 hover:bg-white/10 hover:text-gold border border-white/10'
           }`}
         >
           <span>←</span>
-          <span className="hidden sm:inline">Back</span>
+          <span className="hidden md:inline text-sm">Back</span>
         </button>
 
         {/* Center: mobile = step name + counter, desktop = dots */}
         <div className="flex-1 mx-3">
-          {/* Mobile: clean text indicator */}
-          <div className="sm:hidden text-center">
+          {/* Mobile/tablet: clean text indicator */}
+          <div className="md:hidden text-center">
             {step ? (
               <div>
-                <p className="text-gold text-sm font-display tracking-wide">{step.transliteration}</p>
-                <p className="text-parchment/30 text-[10px]">{step.number} of 15</p>
+                <p className="text-gold text-base font-display tracking-wide">{step.transliteration}</p>
+                <p className="text-parchment/30 text-xs">{step.number} of 15</p>
               </div>
             ) : page === 0 ? (
-              <p className="text-parchment/40 text-xs">Haggadah</p>
+              <p className="text-parchment/40 text-sm">Haggadah</p>
             ) : (
-              <p className="text-gold text-sm font-display">Chag Sameach</p>
+              <p className="text-gold text-base font-display">Chag Sameach</p>
             )}
           </div>
 
           {/* Desktop: dot indicators */}
-          <div className="hidden sm:flex items-center justify-center gap-1">
+          <div className="hidden md:flex items-center justify-center gap-1">
             {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
               <button
                 key={i}
@@ -131,13 +131,13 @@ function PageNav({
         <button
           onClick={() => setPage(page + 1, 1)}
           disabled={page === TOTAL_PAGES - 1}
-          className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full text-sm transition-all min-w-[3rem] justify-center ${
+          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-full text-base transition-all min-w-[3.5rem] justify-center ${
             page === TOTAL_PAGES - 1
               ? 'opacity-0 pointer-events-none'
               : 'bg-gold/20 text-gold active:bg-gold/40 hover:bg-gold/30 border border-gold/30 font-medium'
           }`}
         >
-          <span className="hidden sm:inline">
+          <span className="hidden md:inline text-sm">
             {isHero ? 'Begin' : 'Next'}
           </span>
           <span>→</span>
