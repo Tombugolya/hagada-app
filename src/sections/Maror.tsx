@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import SectionImage from '../components/SectionImage';
@@ -39,7 +40,7 @@ export default function Maror() {
           🥬
         </motion.div>
       </motion.div>
-      <p className="text-center text-parchment/40 text-xs mb-6 -mt-4">Tap for a taste of bitterness</p>
+      <p className="text-center text-parchment/40 text-xs mb-6 -mt-4">{t('maror.tapForBitterness')}</p>
 
       <SectionImage src="/images/generated/maror.png" alt="Bitter herbs" />
       <SectionText {...sectionTextProps(section)} />

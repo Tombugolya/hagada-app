@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import SectionImage from '../components/SectionImage';
 import { sectionTextProps } from '../content/sectionHelper';
@@ -136,7 +137,7 @@ export default function Kadesh() {
               exit={{ opacity: 0 }}
               className="text-gold/60 text-sm mt-4 animate-pulse"
             >
-              Tap the cup to pour wine
+              {t('kadesh.tapToPour')}
             </motion.p>
           )}
         </AnimatePresence>

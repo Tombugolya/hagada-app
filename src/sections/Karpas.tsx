@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import SectionImage from '../components/SectionImage';
@@ -122,7 +123,7 @@ export default function Karpas() {
               exit={{ opacity: 0 }}
               className="text-spring-light/60 text-sm mt-2 animate-pulse"
             >
-              {isDipping ? 'Dipping...' : 'Tap to dip the vegetable in salt water'}
+              {isDipping ? t('karpas.dipping') : t('karpas.tapToDip')}
             </motion.p>
           )}
           {dipped && (
@@ -131,7 +132,7 @@ export default function Karpas() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-spring-light text-lg mt-2"
             >
-              We taste the tears of our ancestors
+              {t('karpas.tears')}
             </motion.p>
           )}
         </AnimatePresence>

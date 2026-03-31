@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import { useSoundEffect } from '../hooks/useSoundEffect';
 
 const HIDING_SPOTS = [
@@ -64,9 +65,9 @@ export default function Tzafun() {
         clicked.x + clicked.w / 2, clicked.y + clicked.h / 2
       );
 
-      if (dist < 30) setHint('🔥 Getting warmer!');
-      else if (dist < 50) setHint('🌡️ Warm...');
-      else setHint('❄️ Cold! Try somewhere else.');
+      if (dist < 30) setHint(t('tzafun.warmer'));
+      else if (dist < 50) setHint(t('tzafun.warm'));
+      else setHint(t('tzafun.cold'));
     }
   }, [found, searched, hiddenSpot, play]);
 
@@ -159,7 +160,7 @@ export default function Tzafun() {
           className="text-center p-6 rounded-xl bg-gradient-to-b from-gold/10 to-transparent border border-gold/20 mb-6"
         >
           <div className="text-4xl mb-2">🎉</div>
-          <h4 className="font-display text-2xl text-gold mb-1">You Found the Afikoman!</h4>
+          <h4 className="font-display text-2xl text-gold mb-1">{t('tzafun.found')}</h4>
           <p className="text-parchment/70 mb-4">
             Found in {(elapsed / 1000).toFixed(1)} seconds with {searched.size} searches
           </p>
@@ -167,7 +168,7 @@ export default function Tzafun() {
             onClick={reset}
             className="px-6 py-2 rounded-full bg-gold/20 text-gold hover:bg-gold/30 transition-colors font-display text-sm tracking-wider"
           >
-            PLAY AGAIN
+            {t('tzafun.playAgain')}
           </button>
         </motion.div>
       )}

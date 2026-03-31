@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 interface Droplet {
@@ -167,7 +168,7 @@ export default function Urchatz() {
             disabled={isWashing}
             className="mt-4 px-8 py-3 rounded-full bg-sea/30 border border-sea-light/40 text-sea-light font-display tracking-wider hover:bg-sea/50 transition-colors disabled:opacity-50"
           >
-            {isWashing ? 'Washing...' : 'Wash Hands'}
+            {isWashing ? t('urchatz.washing') : t('urchatz.washHands')}
           </motion.button>
         ) : (
           <motion.div
@@ -175,8 +176,8 @@ export default function Urchatz() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center"
           >
-            <p className="text-sea-light text-lg mb-2">Hands purified</p>
-            <p className="text-parchment/50 text-sm">No blessing is recited for this washing</p>
+            <p className="text-sea-light text-lg mb-2">{t('urchatz.purified')}</p>
+            <p className="text-parchment/50 text-sm">{t('urchatz.noBlessing')}</p>
           </motion.div>
         )}
       </motion.div>

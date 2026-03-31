@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { plagues, haggadahText } from '../../content/haggadah';
+import { t } from '../../content/translations';
 
 // ─── PLAGUE-SPECIFIC SOUND EFFECTS ──────────────────────────────
 
@@ -648,7 +649,7 @@ export default function TenPlagues() {
       <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1 sm:mb-2">{section.title}</h3>
       <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">{section.hebrewTitle}</p>
       <p className="text-center text-parchment/60 text-xs sm:text-sm mb-2 sm:mb-4 max-w-lg mx-auto">{section.instruction}</p>
-      <p className="text-center text-parchment/40 text-[10px] sm:text-xs mb-4 sm:mb-8">Tap each plague to remove a drop of wine from your cup</p>
+      <p className="text-center text-parchment/40 text-[10px] sm:text-xs mb-4 sm:mb-8">{t('plagues.tapToRemove')}</p>
 
       <div className="flex flex-col lg:flex-row gap-6 sm:gap-10 items-center lg:items-start justify-center">
         {/* Wine glass — horizontal on mobile, vertical on desktop */}

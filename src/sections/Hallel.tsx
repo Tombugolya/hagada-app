@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import WineCup from '../components/WineCup';
@@ -57,7 +58,7 @@ export default function Hallel() {
         viewport={{ once: true }}
         className="text-center mt-10"
       >
-        <p className="font-display text-gold text-lg mb-4">The Fourth Cup of Wine</p>
+        <p className="font-display text-gold text-lg mb-4">{t('hallel.fourthCup')}</p>
         <div className="flex justify-center">
           <WineCup size={100} fillPercent={100} />
         </div>

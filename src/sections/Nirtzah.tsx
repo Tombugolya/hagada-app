@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText, chadGadya, echadMiYodea } from '../content/haggadah';
 import { useSoundEffect } from '../hooks/useSoundEffect';
+import { t } from '../content/translations';
 import SectionImage from '../components/SectionImage';
 
 export default function Nirtzah() {
@@ -89,7 +90,7 @@ export default function Nirtzah() {
               initial={{ opacity: finaleTriggered ? 1 : 0.7 }}
               animate={{ opacity: 1 }}
             >
-              NEXT YEAR IN JERUSALEM!
+              {t('nirtzah.nextYear')}
             </motion.p>
           </motion.div>
         </motion.button>
@@ -130,7 +131,7 @@ export default function Nirtzah() {
             className="w-full p-5 flex items-center justify-between bg-white/5 hover:bg-white/8 transition-colors text-left"
           >
             <div>
-              <h4 className="font-display text-lg text-gold">Chad Gadya — One Little Goat</h4>
+              <h4 className="font-display text-lg text-gold">{t('nirtzah.chadGadya')}</h4>
               <p className="text-parchment/50 text-sm">חַד גַּדְיָא</p>
             </div>
             <span className="text-gold text-xl">{showChadGadya ? '−' : '+'}</span>
@@ -168,7 +169,7 @@ export default function Nirtzah() {
             className="w-full p-5 flex items-center justify-between bg-white/5 hover:bg-white/8 transition-colors text-left"
           >
             <div>
-              <h4 className="font-display text-lg text-gold">Echad Mi Yodea — Who Knows One?</h4>
+              <h4 className="font-display text-lg text-gold">{t('nirtzah.echadMiYodea')}</h4>
               <p className="text-parchment/50 text-sm">אֶחָד מִי יוֹדֵעַ</p>
             </div>
             <span className="text-gold text-xl">{showEchad ? '−' : '+'}</span>

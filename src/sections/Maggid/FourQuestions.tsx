@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fourQuestionsQuiz } from '../../content/haggadah';
+import { t } from '../../content/translations';
 import { useSoundEffect } from '../../hooks/useSoundEffect';
 
 export default function FourQuestions() {
@@ -55,9 +56,9 @@ export default function FourQuestions() {
       viewport={{ once: true }}
       className="max-w-2xl mx-auto"
     >
-      <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1">Mah Nishtana — The Four Questions</h3>
+      <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1">{t('fourQ.title')}</h3>
       <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">מַה נִּשְׁתַּנָּה</p>
-      <p className="text-center text-parchment/50 text-xs sm:text-sm mb-4 sm:mb-8">Test your knowledge! Answer each question correctly.</p>
+      <p className="text-center text-parchment/50 text-xs sm:text-sm mb-4 sm:mb-8">{t('fourQ.subtitle')}</p>
 
       {/* Progress dots */}
       <div className="flex justify-center gap-2 mb-8">
@@ -129,7 +130,7 @@ export default function FourQuestions() {
                   className="p-5 rounded-xl bg-gold/5 border border-gold/15"
                 >
                   <p className="text-gold text-sm font-display tracking-wider mb-1">
-                    {selected === question.correctAnswer ? 'CORRECT!' : 'NOT QUITE...'}
+                    {selected === question.correctAnswer ? t('fourQ.correct') : t('fourQ.wrong')}
                   </p>
                   <p className="text-parchment/80 text-base">{question.explanation}</p>
                 </motion.div>
@@ -144,17 +145,17 @@ export default function FourQuestions() {
           >
             <div className="text-5xl mb-4">{score === 4 ? '🌟' : score >= 2 ? '👏' : '📚'}</div>
             <h4 className="font-display text-2xl text-gold mb-2">
-              {score === 4 ? 'Perfect! A True Wise Child!' :
-               score >= 2 ? 'Well Done!' : 'Keep Learning!'}
+              {score === 4 ? t('fourQ.perfect') :
+               score >= 2 ? t('fourQ.wellDone') : t('fourQ.keepLearning')}
             </h4>
             <p className="text-parchment/70 text-lg mb-6">
-              You answered {score} out of 4 questions correctly
+              {t('fourQ.score', { score })}
             </p>
             <button
               onClick={reset}
               className="px-6 py-2 rounded-full bg-gold/20 text-gold hover:bg-gold/30 transition-colors font-display text-sm tracking-wider"
             >
-              TRY AGAIN
+              {t('fourQ.tryAgain')}
             </button>
           </motion.div>
         )}

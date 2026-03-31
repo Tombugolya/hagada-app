@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { dayenuVerses } from '../../content/haggadah';
+import { t } from '../../content/translations';
 import SectionImage from '../../components/SectionImage';
 
 export default function Dayenu() {
@@ -45,9 +46,9 @@ export default function Dayenu() {
       viewport={{ once: true }}
       className="max-w-2xl mx-auto"
     >
-      <h3 className="font-display text-2xl text-gold text-center mb-2">Dayenu — It Would Have Been Enough</h3>
+      <h3 className="font-display text-2xl text-gold text-center mb-2">{t('dayenu.title')}</h3>
       <p className="hebrew-text text-center text-gold-light/80 text-xl mb-2">דַּיֵּנוּ</p>
-      <p className="text-center text-parchment/50 text-sm mb-6">How many levels of goodness has God bestowed upon us!</p>
+      <p className="text-center text-parchment/50 text-sm mb-6">{t('dayenu.subtitle')}</p>
 
       <SectionImage src="/images/generated/dayenu.png" alt="Crossing the Red Sea" />
 
@@ -60,7 +61,7 @@ export default function Dayenu() {
               : 'bg-gold/20 text-gold hover:bg-gold/30'
           }`}
         >
-          {isPlaying ? '⏹ STOP' : '▶ SING ALONG'}
+          {isPlaying ? `⏹ ${t('dayenu.stop')}` : `▶ ${t('dayenu.singAlong')}`}
         </button>
       </div>
 

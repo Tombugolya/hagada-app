@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
+import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import WineCup from '../components/WineCup';
@@ -27,7 +28,7 @@ export default function Barech() {
         className="mt-10 text-center"
       >
         <SectionImage src="/images/generated/elijah.png" alt="Cup of Elijah" />
-        <h4 className="font-display text-lg text-gold mb-4">The Cup of Elijah</h4>
+        <h4 className="font-display text-lg text-gold mb-4">{t('barech.cupOfElijah')}</h4>
 
         {/* Door animation */}
         <div
@@ -73,7 +74,7 @@ export default function Barech() {
           </div>
         </div>
         <p className="text-gold/50 text-sm animate-pulse">
-          {doorOpen ? 'Welcome, Elijah!' : 'Tap to open the door for Elijah'}
+          {doorOpen ? t('barech.welcome') : t('barech.openDoor')}
         </p>
 
         {/* Elijah's prayer in Hebrew */}

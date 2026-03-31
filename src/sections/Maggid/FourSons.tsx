@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { fourSons } from '../../content/haggadah';
+import { t } from '../../content/translations';
 
 export default function FourSons() {
   const [flipped, setFlipped] = useState<Record<number, boolean>>({});
@@ -16,9 +17,9 @@ export default function FourSons() {
       viewport={{ once: true }}
       className="max-w-3xl mx-auto"
     >
-      <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1 sm:mb-2">The Four Sons</h3>
+      <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1 sm:mb-2">{t('fourSons.title')}</h3>
       <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">אַרְבָּעָה בָנִים</p>
-      <p className="text-center text-parchment/50 text-xs sm:text-sm mb-6 sm:mb-10">Tap each card to reveal the response</p>
+      <p className="text-center text-parchment/50 text-xs sm:text-sm mb-6 sm:mb-10">{t('fourSons.tapToReveal')}</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {fourSons.map((son, i) => (
@@ -42,7 +43,7 @@ export default function FourSons() {
                   <h4 className="font-display text-base sm:text-xl text-gold mb-1">{son.type}</h4>
                   <p className="hebrew-text text-gold-light/70 text-sm sm:text-lg mb-2 sm:mb-4">{son.hebrew}</p>
                   <p className="text-parchment/80 text-sm sm:text-base italic">{son.question}</p>
-                  <p className="text-gold/40 text-[10px] sm:text-xs mt-2 sm:mt-4 animate-pulse">Tap to see the response</p>
+                  <p className="text-gold/40 text-[10px] sm:text-xs mt-2 sm:mt-4 animate-pulse">{t('fourSons.tapToFlip')}</p>
                 </div>
               </div>
 
@@ -50,9 +51,9 @@ export default function FourSons() {
               <div className="absolute inset-0 backface-hidden rotate-y-180">
                 <div className={`h-full p-4 sm:p-6 rounded-2xl bg-gradient-to-br ${son.color} border border-gold/25 flex flex-col justify-center`}>
                   <div className="text-2xl sm:text-3xl text-center mb-2 sm:mb-3">{son.icon}</div>
-                  <h4 className="font-display text-base sm:text-lg text-gold mb-2 sm:mb-3 text-center">The Response:</h4>
+                  <h4 className="font-display text-base sm:text-lg text-gold mb-2 sm:mb-3 text-center">{t('fourSons.response')}</h4>
                   <p className="text-parchment/90 text-sm sm:text-base leading-relaxed">{son.response}</p>
-                  <p className="text-gold/40 text-[10px] sm:text-xs mt-2 sm:mt-4 text-center animate-pulse">Tap to flip back</p>
+                  <p className="text-gold/40 text-[10px] sm:text-xs mt-2 sm:mt-4 text-center animate-pulse">{t('fourSons.tapBack')}</p>
                 </div>
               </div>
             </div>
