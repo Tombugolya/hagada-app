@@ -247,29 +247,28 @@ function FrogsEffect() {
   // Frogs bouncing across the screen
   const frogs = Array.from({ length: 15 }, (_, i) => ({
     id: i,
-    startX: Math.random() * 100,
-    startY: 100 + Math.random() * 20,
-    endX: Math.random() * 100,
-    endY: Math.random() * 60,
-    size: 20 + Math.random() * 25,
+    startX: Math.random() * 80 + 10,
+    startY: 70 + Math.random() * 20,
+    size: 24 + Math.random() * 28,
     delay: Math.random() * 0.5,
   }));
 
   return (
-    <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 z-40 pointer-events-none">
       {frogs.map(f => (
         <motion.div
           key={f.id}
           className="absolute"
           style={{ fontSize: f.size, left: `${f.startX}%`, top: `${f.startY}%` }}
-          initial={{ y: 0, opacity: 1 }}
+          initial={{ opacity: 0, scale: 0 }}
           animate={{
-            x: [0, (f.endX - f.startX) * 3, (f.endX - f.startX) * 6],
-            y: [0, -(f.startY - f.endY) * 4, -20],
-            opacity: [1, 1, 0],
-            rotate: [0, -20, 20],
+            opacity: [0, 1, 1, 0],
+            scale: [0, 1.2, 1, 0.8],
+            y: [0, -150, -80, -200],
+            x: [0, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 150],
+            rotate: [0, -15, 15, -10],
           }}
-          transition={{ duration: 2, delay: f.delay, ease: 'easeOut' }}
+          transition={{ duration: 2.5, delay: f.delay, ease: 'easeOut' }}
         >
           🐸
         </motion.div>
@@ -424,30 +423,34 @@ function PestilenceEffect() {
 }
 
 function BoilsEffect() {
-  // Red bubbling spots appearing
+  // Red bubbling spots appearing all over
   return (
     <div className="fixed inset-0 z-40 pointer-events-none">
-      {Array.from({ length: 25 }).map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            left: `${Math.random() * 90}%`,
-            top: `${Math.random() * 90}%`,
-            background: 'radial-gradient(circle, #cc3333, #880000)',
-          }}
-          initial={{ width: 0, height: 0, opacity: 0 }}
-          animate={{
-            width: [0, 10 + Math.random() * 20, 10 + Math.random() * 15],
-            height: [0, 10 + Math.random() * 20, 10 + Math.random() * 15],
-            opacity: [0, 0.8, 0],
-          }}
-          transition={{ duration: 2, delay: i * 0.06 }}
-        />
-      ))}
+      {Array.from({ length: 40 }).map((_, i) => {
+        const size = 15 + Math.random() * 30;
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: `${Math.random() * 85}%`,
+              top: `${Math.random() * 85}%`,
+              background: 'radial-gradient(circle, #ee4444, #aa0000, #660000)',
+              width: size,
+              height: size,
+            }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: [0, 1.2, 1, 0.8],
+              opacity: [0, 0.9, 0.7, 0],
+            }}
+            transition={{ duration: 2.5, delay: i * 0.05 }}
+          />
+        );
+      })}
       <motion.div
-        className="absolute inset-0 bg-red-900/10"
-        animate={{ opacity: [0, 0.3, 0] }}
+        className="absolute inset-0 bg-red-900/20"
+        animate={{ opacity: [0, 0.4, 0.2, 0.3, 0] }}
         transition={{ duration: 2.5 }}
       />
     </div>
@@ -455,33 +458,34 @@ function BoilsEffect() {
 }
 
 function HailEffect() {
-  // White/blue hailstones falling with fire trails
+  // White/blue hailstones raining down with fiery trails
   return (
-    <div className="fixed inset-0 z-40 pointer-events-none overflow-hidden">
-      {Array.from({ length: 30 }).map((_, i) => {
+    <div className="fixed inset-0 z-40 pointer-events-none">
+      {Array.from({ length: 40 }).map((_, i) => {
         const x = Math.random() * 100;
-        const size = 6 + Math.random() * 12;
+        const size = 8 + Math.random() * 16;
         return (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
               left: `${x}%`,
-              top: '-5%',
+              top: '-3%',
               width: size,
               height: size,
               background: 'radial-gradient(circle, white, #88ccff)',
-              boxShadow: `0 -${size}px ${size * 2}px rgba(255,100,0,0.4), 0 0 ${size}px rgba(136,204,255,0.6)`,
+              boxShadow: `0 -${size}px ${size * 3}px rgba(255,80,0,0.5), 0 0 ${size * 2}px rgba(136,204,255,0.7)`,
             }}
-            animate={{ y: '110vh', rotate: 360 }}
-            transition={{ duration: 0.8 + Math.random() * 0.5, delay: i * 0.05, ease: 'easeIn' }}
+            initial={{ y: 0, opacity: 1 }}
+            animate={{ y: '105vh', rotate: 720, opacity: [1, 1, 0.5] }}
+            transition={{ duration: 1 + Math.random() * 0.6, delay: i * 0.04, ease: 'easeIn' }}
           />
         );
       })}
       <motion.div
-        className="absolute inset-0 bg-blue-900/10"
-        animate={{ opacity: [0, 0.2, 0.1, 0.2, 0] }}
-        transition={{ duration: 2 }}
+        className="absolute inset-0 bg-blue-900/15"
+        animate={{ opacity: [0, 0.3, 0.1, 0.3, 0] }}
+        transition={{ duration: 2.5 }}
       />
     </div>
   );

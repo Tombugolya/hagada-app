@@ -137,7 +137,7 @@ export default function FourQuestions() {
                     transition={{ delay: i * 0.1 }}
                     onClick={() => handleAnswer(answer)}
                     disabled={!!selected}
-                    className={`w-full p-3 sm:p-4 rounded-lg border text-left transition-all cursor-pointer ${bg} ${
+                    className={`w-full p-3 sm:p-4 rounded-lg border text-start transition-all cursor-pointer ${bg} ${
                       !selected ? 'hover:border-gold/30' : ''
                     }`}
                   >
