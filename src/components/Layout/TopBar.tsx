@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../hooks/LanguageContext';
+import { t } from '../../content/translations';
 
 interface TopBarProps {
   narration: {
@@ -20,6 +22,7 @@ const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
 export default function TopBar({ narration }: TopBarProps) {
   const [showControls, setShowControls] = useState(false);
+  const { lang, toggleLang } = useLanguage();
 
   return (
     <motion.header
@@ -29,10 +32,10 @@ export default function TopBar({ narration }: TopBarProps) {
     >
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         <h1 className="font-display text-gold text-sm sm:text-base md:text-lg tracking-wider truncate mr-2">
-          Haggadah Shel Pesach
+          {t('app.title')}
         </h1>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {narration.isPlaying && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -64,10 +67,19 @@ export default function TopBar({ narration }: TopBarProps) {
             </motion.div>
           )}
 
+          {/* Language toggle */}
+          <button
+            onClick={toggleLang}
+            className="px-2.5 py-1 rounded-full text-sm font-medium transition-colors bg-white/5 border border-gold/20 text-gold hover:bg-gold/20 active:bg-gold/30"
+            title={lang === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
+          >
+            {lang === 'en' ? 'עב' : 'EN'}
+          </button>
+
           <button
             onClick={() => setShowControls(!showControls)}
             className="text-parchment/60 active:text-gold hover:text-gold transition-colors text-xl p-1"
-            title="Narration settings"
+            title="Settings"
           >
             ⚙
           </button>
@@ -84,7 +96,7 @@ export default function TopBar({ narration }: TopBarProps) {
           >
             <div className="max-w-6xl mx-auto px-4 py-3 flex flex-col sm:flex-row gap-3 sm:gap-6 items-start sm:items-center text-sm">
               <div className="flex items-center gap-2">
-                <span className="text-parchment/50">Speed:</span>
+                <span className="text-parchment/50">{t('settings.speed')}</span>
                 {rates.map(r => (
                   <button
                     key={r}
@@ -102,7 +114,7 @@ export default function TopBar({ narration }: TopBarProps) {
 
               {narration.availableVoices.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <span className="text-parchment/50">Voice:</span>
+                  <span className="text-parchment/50">{t('settings.voice')}</span>
                   <select
                     value={narration.voice?.name || ''}
                     onChange={e => {

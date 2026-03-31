@@ -28,10 +28,10 @@ html {
   scroll-behavior: smooth;
   overscroll-behavior: none;
   /* Larger base font on mobile — Tailwind rem sizes scale with this */
-  font-size: 19px;
+  font-size: 22px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   html {
     font-size: 16px;
   }

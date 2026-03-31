@@ -4,7 +4,9 @@ import Starfield from './components/Starfield';
 import TopBar from './components/Layout/TopBar';
 import SederStep from './components/SederStep';
 import { sederSteps } from './content/haggadah';
+import { t, setTranslationLang } from './content/translations';
 import { NarrationProvider, useNarrationContext } from './hooks/NarrationContext';
+import { LanguageProvider, useLanguage } from './hooks/LanguageContext';
 
 // Section imports
 import Kadesh from './sections/Kadesh';
@@ -62,25 +64,27 @@ function PageNav({
   page: number;
   setPage: (p: number, dir: number) => void;
 }) {
-  const isHero = page === 0;
   const stepIndex = page - 1;
   const step = sederSteps[stepIndex];
-
+  const { isHebrew } = useLanguage();
   const progress = page / (TOTAL_PAGES - 1);
+
+  // In RTL, arrows flip
+  const backArrow = isHebrew ? '→' : '←';
+  const nextArrow = isHebrew ? '←' : '→';
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-midnight/90 backdrop-blur-md border-t border-gold/10 safe-bottom">
-      {/* Thin progress bar at the very top of the nav */}
       <div className="h-0.5 bg-white/5">
         <motion.div
-          className="h-full bg-gold/60"
+          className="h-full bg-gold/60 origin-left"
+          style={{ direction: 'ltr' }}
           animate={{ width: `${progress * 100}%` }}
           transition={{ type: 'spring', damping: 20 }}
         />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
-        {/* Back button */}
         <button
           onClick={() => setPage(page - 1, -1)}
           disabled={page === 0}
@@ -90,27 +94,26 @@ function PageNav({
               : 'bg-white/5 text-parchment/70 active:bg-white/15 hover:bg-white/10 hover:text-gold border border-white/10'
           }`}
         >
-          <span>←</span>
-          <span className="hidden md:inline text-sm">Back</span>
+          <span>{backArrow}</span>
+          <span className="hidden md:inline text-sm">{t('nav.back')}</span>
         </button>
 
-        {/* Center: mobile = step name + counter, desktop = dots */}
         <div className="flex-1 mx-3">
-          {/* Mobile/tablet: clean text indicator */}
           <div className="md:hidden text-center">
             {step ? (
               <div>
-                <p className="text-gold text-base font-display tracking-wide">{step.transliteration}</p>
-                <p className="text-parchment/30 text-xs">{step.number} of 15</p>
+                <p className="text-gold text-base font-display tracking-wide">
+                  {isHebrew ? step.hebrew : step.transliteration}
+                </p>
+                <p className="text-parchment/30 text-xs">{step.number} {t('nav.stepOf')}</p>
               </div>
             ) : page === 0 ? (
-              <p className="text-parchment/40 text-sm">Haggadah</p>
+              <p className="text-parchment/40 text-sm">{t('nav.haggadah')}</p>
             ) : (
-              <p className="text-gold text-base font-display">Chag Sameach</p>
+              <p className="text-gold text-base font-display">{t('footer.chagSameach')}</p>
             )}
           </div>
 
-          {/* Desktop: dot indicators */}
           <div className="hidden md:flex items-center justify-center gap-1">
             {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
               <button
@@ -127,7 +130,6 @@ function PageNav({
           </div>
         </div>
 
-        {/* Next button */}
         <button
           onClick={() => setPage(page + 1, 1)}
           disabled={page === TOTAL_PAGES - 1}
@@ -137,10 +139,8 @@ function PageNav({
               : 'bg-gold/20 text-gold active:bg-gold/40 hover:bg-gold/30 border border-gold/30 font-medium'
           }`}
         >
-          <span className="hidden md:inline text-sm">
-            {isHero ? 'Begin' : 'Next'}
-          </span>
-          <span>→</span>
+          <span className="hidden md:inline text-sm">{t('nav.next')}</span>
+          <span>{nextArrow}</span>
         </button>
       </div>
     </div>
@@ -149,10 +149,16 @@ function PageNav({
 
 function AppContent() {
   const narration = useNarrationContext();
+  const { lang, isHebrew } = useLanguage();
   const [page, setPageRaw] = useState(0);
   const [direction, setDirection] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Sync translation lang
+  useEffect(() => {
+    setTranslationLang(lang);
+  }, [lang]);
 
   const setPage = useCallback((p: number, dir: number) => {
     if (p < 0 || p >= TOTAL_PAGES) return;
@@ -162,7 +168,6 @@ function AppContent() {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [narration]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
@@ -177,7 +182,6 @@ function AppContent() {
     return () => window.removeEventListener('keydown', handler);
   }, [page, setPage]);
 
-  // Touch swipe navigation
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   }, []);
@@ -188,10 +192,9 @@ function AppContent() {
     const dy = e.changedTouches[0].clientY - touchStartRef.current.y;
     touchStartRef.current = null;
 
-    // Only trigger on horizontal swipes (not vertical scrolling)
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx < 0) setPage(page + 1, 1);   // swipe left = next
-      else setPage(page - 1, -1);           // swipe right = back
+      if (dx < 0) setPage(page + 1, 1);
+      else setPage(page - 1, -1);
     }
   }, [page, setPage]);
 
@@ -208,7 +211,6 @@ function AppContent() {
       <Starfield />
       <TopBar narration={narration} />
 
-      {/* Page content area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto overflow-x-hidden mt-14 -webkit-overflow-scrolling-touch">
 
       <AnimatePresence mode="wait" custom={direction}>
@@ -227,11 +229,13 @@ function AppContent() {
             <h1 className="font-hebrew text-4xl sm:text-5xl md:text-7xl text-gold mb-3 sm:mb-4 leading-tight">
               הַגָּדָה שֶׁל פֶּסַח
             </h1>
-            <p className="font-display text-lg sm:text-2xl md:text-3xl text-parchment tracking-[0.15em] sm:tracking-[0.2em] mb-2">
-              HAGGADAH SHEL PESACH
-            </p>
+            {!isHebrew && (
+              <p className="font-display text-lg sm:text-2xl md:text-3xl text-parchment tracking-[0.15em] sm:tracking-[0.2em] mb-2">
+                HAGGADAH SHEL PESACH
+              </p>
+            )}
             <p className="text-parchment/60 text-sm sm:text-lg max-w-lg px-4">
-              The telling of the story of our Exodus from Egypt — an interactive journey through the Passover Seder
+              {t('hero.subtitle')}
             </p>
             <div className="mt-6 sm:mt-8 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
             <motion.button
@@ -240,7 +244,7 @@ function AppContent() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              BEGIN THE SEDER →
+              {t('hero.begin')}
             </motion.button>
           </motion.section>
         )}
@@ -282,17 +286,17 @@ function AppContent() {
           >
             <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">✨</div>
             <p className="text-gold font-hebrew text-4xl sm:text-5xl mb-3 sm:mb-4">חַג שָׂמֵחַ</p>
-            <p className="font-display text-xl sm:text-2xl text-parchment tracking-wider mb-2">Chag Sameach</p>
-            <p className="text-parchment/60 text-base sm:text-lg">Happy Passover!</p>
+            <p className="font-display text-xl sm:text-2xl text-parchment tracking-wider mb-2">{t('footer.chagSameach')}</p>
+            <p className="text-parchment/60 text-base sm:text-lg">{t('footer.happyPassover')}</p>
             <div className="mt-4 sm:mt-6 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
             <p className="text-parchment/30 text-xs sm:text-sm mt-6 sm:mt-8">
-              An interactive Haggadah experience
+              {t('footer.interactive')}
             </p>
             <button
               onClick={() => setPage(0, -1)}
               className="mt-4 sm:mt-6 px-5 sm:px-6 py-2 rounded-full bg-white/5 text-parchment/50 active:text-gold hover:text-gold border border-white/10 text-sm transition-all"
             >
-              ← Return to beginning
+              {t('footer.return')}
             </button>
           </motion.footer>
         )}
@@ -306,8 +310,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <NarrationProvider>
-      <AppContent />
-    </NarrationProvider>
+    <LanguageProvider>
+      <NarrationProvider>
+        <AppContent />
+      </NarrationProvider>
+    </LanguageProvider>
   );
 }

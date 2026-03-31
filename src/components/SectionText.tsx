@@ -1,13 +1,18 @@
 import { motion } from 'framer-motion';
 import { useNarrationContext } from '../hooks/NarrationContext';
+import { useLanguage } from '../hooks/LanguageContext';
+import { t } from '../content/translations';
 
 interface SectionTextProps {
   blessing?: string;
   blessingHebrew?: string;
   blessingEnglish?: string;
   instructions?: string;
+  instructionsHe?: string;
   body: string;
+  bodyHe?: string;
   commentary?: string;
+  commentaryHe?: string;
   className?: string;
 }
 
@@ -16,17 +21,25 @@ export default function SectionText({
   blessingHebrew,
   blessingEnglish,
   instructions,
+  instructionsHe,
   body,
+  bodyHe,
   commentary,
+  commentaryHe,
   className = '',
 }: SectionTextProps) {
   const narration = useNarrationContext();
+  const { isHebrew } = useLanguage();
+
+  const displayInstructions = isHebrew ? (instructionsHe || instructions) : instructions;
+  const displayBody = isHebrew ? (bodyHe || body) : body;
+  const displayCommentary = isHebrew ? (commentaryHe || commentary) : commentary;
 
   const readableText = [
-    instructions,
-    blessingEnglish,
-    body,
-    commentary ? `Commentary: ${commentary}` : undefined,
+    displayInstructions,
+    isHebrew ? undefined : blessingEnglish,
+    displayBody,
+    displayCommentary ? `${t('section.commentary')}: ${displayCommentary}` : undefined,
   ].filter(Boolean).join('. ');
 
   const handleNarration = () => {
@@ -39,9 +52,8 @@ export default function SectionText({
 
   return (
     <div className={`max-w-2xl mx-auto space-y-5 ${className}`}>
-      {/* Read Aloud / Stop button */}
       {readableText.trim() && (
-        <div className="flex justify-end">
+        <div className={`flex ${isHebrew ? 'justify-start' : 'justify-end'}`}>
           <motion.button
             onClick={handleNarration}
             whileTap={{ scale: 0.95 }}
@@ -52,19 +64,19 @@ export default function SectionText({
             }`}
           >
             <span>{narration.isPlaying ? '⏹' : '🔊'}</span>
-            <span>{narration.isPlaying ? 'Stop' : 'Read Aloud'}</span>
+            <span>{narration.isPlaying ? t('section.stop') : t('section.readAloud')}</span>
           </motion.button>
         </div>
       )}
 
-      {instructions && (
+      {displayInstructions && (
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-gold/80 italic text-lg border-l-2 border-gold/30 pl-4"
+          className={`text-gold/80 italic text-lg ${isHebrew ? 'border-r-2 border-gold/30 pr-4' : 'border-l-2 border-gold/30 pl-4'}`}
         >
-          {instructions}
+          {displayInstructions}
         </motion.div>
       )}
 
@@ -80,7 +92,7 @@ export default function SectionText({
         </motion.div>
       )}
 
-      {blessing && (
+      {!isHebrew && blessing && (
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -92,7 +104,7 @@ export default function SectionText({
         </motion.p>
       )}
 
-      {blessingEnglish && (
+      {!isHebrew && blessingEnglish && (
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -104,17 +116,19 @@ export default function SectionText({
         </motion.p>
       )}
 
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
-        className="text-parchment/90 text-lg md:text-xl leading-relaxed whitespace-pre-line font-serif"
-      >
-        {body}
-      </motion.div>
+      {displayBody && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className={`text-parchment/90 text-lg md:text-xl leading-relaxed whitespace-pre-line ${isHebrew ? 'font-hebrew' : 'font-serif'}`}
+        >
+          {displayBody}
+        </motion.div>
+      )}
 
-      {commentary && (
+      {displayCommentary && (
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -122,8 +136,8 @@ export default function SectionText({
           transition={{ delay: 0.4 }}
           className="mt-5 p-4 rounded-xl bg-gold/5 border border-gold/15 text-parchment/70 text-base leading-relaxed"
         >
-          <span className="text-gold font-display text-sm tracking-wider uppercase block mb-1">Commentary</span>
-          {commentary}
+          <span className="text-gold font-display text-sm tracking-wider uppercase block mb-1">{t('section.commentary')}</span>
+          {displayCommentary}
         </motion.div>
       )}
     </div>
