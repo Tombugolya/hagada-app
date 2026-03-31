@@ -1,8 +1,19 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fourQuestionsQuiz } from '../../content/haggadah';
 import { t } from '../../content/translations';
+import { useLanguage } from '../../hooks/LanguageContext';
 import { useSoundEffect } from '../../hooks/useSoundEffect';
+
+// Shuffle once per question index, not on every render
+function shuffleArray<T>(arr: T[]): T[] {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 export default function FourQuestions() {
   const [currentQ, setCurrentQ] = useState(0);
@@ -10,17 +21,29 @@ export default function FourQuestions() {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
   const { play } = useSoundEffect();
+  const { isHebrew } = useLanguage();
 
   const question = fourQuestionsQuiz[currentQ];
-  const allAnswers = question
-    ? [...question.wrongAnswers, question.correctAnswer].sort(() => Math.random() - 0.5)
-    : [];
+
+  // Get the right language versions
+  const correctAnswer = isHebrew ? (question?.correctAnswerHe || question?.correctAnswer) : question?.correctAnswer;
+  const wrongAnswers = isHebrew ? (question?.wrongAnswersHe || question?.wrongAnswers) : question?.wrongAnswers;
+  const explanation = isHebrew ? (question?.explanationHe || question?.explanation) : question?.explanation;
+  const questionText = isHebrew ? question?.questionHebrew : question?.question;
+
+  // Shuffle answers ONCE per question + reset, not every render
+  const allAnswers = useMemo(() => {
+    if (!correctAnswer || !wrongAnswers) return [];
+    return shuffleArray([...wrongAnswers, correctAnswer]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQ, resetKey, isHebrew]);
 
   const handleAnswer = (answer: string) => {
     if (selected) return;
     setSelected(answer);
-    const correct = answer === question.correctAnswer;
+    const correct = answer === correctAnswer;
     if (correct) {
       play('chime');
       setScore(s => s + 1);
@@ -47,6 +70,7 @@ export default function FourQuestions() {
     setScore(0);
     setShowResult(false);
     setCompleted(false);
+    setResetKey(k => k + 1);
   };
 
   return (
@@ -77,7 +101,7 @@ export default function FourQuestions() {
       <AnimatePresence mode="wait">
         {!completed ? (
           <motion.div
-            key={currentQ}
+            key={`${currentQ}-${resetKey}`}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
@@ -86,7 +110,7 @@ export default function FourQuestions() {
             {/* Question */}
             <div className="p-4 sm:p-6 rounded-xl bg-white/5 border border-gold/20 text-center">
               <p className="hebrew-text text-gold-light text-sm sm:text-lg mb-2 sm:mb-3">{question.questionHebrew}</p>
-              <p className="text-parchment text-base sm:text-xl font-medium">{question.question}</p>
+              {!isHebrew && <p className="text-parchment text-base sm:text-xl font-medium">{questionText}</p>}
             </div>
 
             {/* Answers */}
@@ -94,7 +118,7 @@ export default function FourQuestions() {
               {allAnswers.map((answer, i) => {
                 let bg = 'bg-white/5 hover:bg-white/10 border-white/10';
                 if (selected) {
-                  if (answer === question.correctAnswer) {
+                  if (answer === correctAnswer) {
                     bg = 'bg-green-900/40 border-green-500/50';
                   } else if (answer === selected) {
                     bg = 'bg-red-900/40 border-red-500/50';
@@ -115,7 +139,7 @@ export default function FourQuestions() {
                       !selected ? 'hover:border-gold/30' : ''
                     }`}
                   >
-                    <span className="text-parchment text-sm sm:text-base">{answer}</span>
+                    <span className={`text-parchment text-sm sm:text-base ${isHebrew ? 'font-hebrew' : ''}`}>{answer}</span>
                   </motion.button>
                 );
               })}
@@ -130,9 +154,9 @@ export default function FourQuestions() {
                   className="p-5 rounded-xl bg-gold/5 border border-gold/15"
                 >
                   <p className="text-gold text-sm font-display tracking-wider mb-1">
-                    {selected === question.correctAnswer ? t('fourQ.correct') : t('fourQ.wrong')}
+                    {selected === correctAnswer ? t('fourQ.correct') : t('fourQ.wrong')}
                   </p>
-                  <p className="text-parchment/80 text-base">{question.explanation}</p>
+                  <p className={`text-parchment/80 text-base ${isHebrew ? 'font-hebrew' : ''}`}>{explanation}</p>
                 </motion.div>
               )}
             </AnimatePresence>
