@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import { t } from '../content/translations';
+import { useLanguage } from '../hooks/LanguageContext';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import WineCup from '../components/WineCup';
@@ -8,6 +9,8 @@ import SectionImage from '../components/SectionImage';
 
 export default function Hallel() {
   const section = haggadahText['hallel'];
+  const { isHebrew } = useLanguage();
+  const displayContent = isHebrew ? (section.contentHe || section.content) : section.content;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -34,7 +37,7 @@ export default function Hallel() {
 
       {/* Psalms text with Hebrew */}
       <div className="space-y-4 mb-8">
-        {section.content.map((verse, i) => (
+        {displayContent.map((verse, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 10 }}
@@ -46,7 +49,7 @@ export default function Hallel() {
             {section.hebrewContent?.[i] && (
               <p className="hebrew-text text-gold-light/80 text-lg mb-2">{section.hebrewContent[i]}</p>
             )}
-            <p className="text-parchment/80 text-lg italic">{verse}</p>
+            <p className={`text-parchment/80 text-lg italic ${isHebrew ? 'font-hebrew' : ''}`}>{verse}</p>
           </motion.div>
         ))}
       </div>

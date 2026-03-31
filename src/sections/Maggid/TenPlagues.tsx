@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { plagues, haggadahText } from '../../content/haggadah';
 import { t } from '../../content/translations';
+import { useLanguage } from '../../hooks/LanguageContext';
 
 // ─── PLAGUE-SPECIFIC SOUND EFFECTS ──────────────────────────────
 
@@ -610,6 +611,7 @@ export default function TenPlagues() {
   const [activeEffect, setActiveEffect] = useState<string | null>(null);
   const [lastPlague, setLastPlague] = useState<number | null>(null);
   const section = haggadahText['ten-plagues'];
+  const { isHebrew } = useLanguage();
 
   const wineLevel = 100 - (activated.size * 10);
 
@@ -646,9 +648,9 @@ export default function TenPlagues() {
         })()}
       </AnimatePresence>
 
-      <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1 sm:mb-2">{section.title}</h3>
-      <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">{section.hebrewTitle}</p>
-      <p className="text-center text-parchment/60 text-xs sm:text-sm mb-2 sm:mb-4 max-w-lg mx-auto">{section.instruction}</p>
+      <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1 sm:mb-2">{isHebrew ? section.hebrewTitle : section.title}</h3>
+      {!isHebrew && <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">{section.hebrewTitle}</p>}
+      <p className="text-center text-parchment/60 text-xs sm:text-sm mb-2 sm:mb-4 max-w-lg mx-auto">{isHebrew ? (section.instructionHe || section.instruction) : section.instruction}</p>
       <p className="text-center text-parchment/40 text-[10px] sm:text-xs mb-4 sm:mb-8">{t('plagues.tapToRemove')}</p>
 
       <div className="flex flex-col lg:flex-row gap-6 sm:gap-10 items-center lg:items-start justify-center">
@@ -770,7 +772,7 @@ export default function TenPlagues() {
             className="mt-10 text-center p-6 rounded-xl bg-gold/5 border border-gold/20"
           >
             <p className="text-parchment text-lg">
-              {section.commentary}
+              {isHebrew ? (section.commentaryHe || section.commentary) : section.commentary}
             </p>
           </motion.div>
         )}

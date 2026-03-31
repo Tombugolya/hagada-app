@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import { t } from '../content/translations';
+import { useLanguage } from '../hooks/LanguageContext';
 import { useSoundEffect } from '../hooks/useSoundEffect';
 
 const HIDING_SPOTS = [
@@ -21,6 +22,7 @@ function getDistance(x1: number, y1: number, x2: number, y2: number) {
 
 export default function Tzafun() {
   const section = haggadahText['tzafun'];
+  const { isHebrew } = useLanguage();
   const [hiddenSpot, setHiddenSpot] = useState(() =>
     HIDING_SPOTS[Math.floor(Math.random() * HIDING_SPOTS.length)].id
   );
@@ -175,28 +177,28 @@ export default function Tzafun() {
 
       <div className="mt-4">
         <div className="space-y-3">
-          {section.content.map((p, i) => (
+          {(isHebrew ? (section.contentHe || section.content) : section.content).map((p, i) => (
             <motion.p
               key={i}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="text-parchment/80 text-lg leading-relaxed"
+              className={`text-parchment/80 text-lg leading-relaxed ${isHebrew ? 'font-hebrew' : ''}`}
             >
               {p}
             </motion.p>
           ))}
         </div>
-        {section.commentary && (
+        {(isHebrew ? (section.commentaryHe || section.commentary) : section.commentary) && (
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="mt-6 p-5 rounded-xl bg-gold/5 border border-gold/10 text-parchment/60 text-base"
           >
-            <span className="text-gold font-display text-sm tracking-wider block mb-1">COMMENTARY</span>
-            {section.commentary}
+            <span className="text-gold font-display text-sm tracking-wider block mb-1">{t('section.commentary')}</span>
+            {isHebrew ? (section.commentaryHe || section.commentary) : section.commentary}
           </motion.div>
         )}
       </div>

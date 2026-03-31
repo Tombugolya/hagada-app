@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { haggadahText, chadGadya, echadMiYodea } from '../content/haggadah';
+import { haggadahText, chadGadya, chadGadyaHe, echadMiYodea } from '../content/haggadah';
 import { useSoundEffect } from '../hooks/useSoundEffect';
 import { t } from '../content/translations';
+import { useLanguage } from '../hooks/LanguageContext';
 import SectionImage from '../components/SectionImage';
 
 export default function Nirtzah() {
   const section = haggadahText['nirtzah'];
+  const { isHebrew } = useLanguage();
   const [showChadGadya, setShowChadGadya] = useState(false);
   const [showEchad, setShowEchad] = useState(false);
   const [finaleTriggered, setFinaleTriggered] = useState(false);
@@ -22,14 +24,14 @@ export default function Nirtzah() {
     <div className="max-w-2xl mx-auto">
       {/* Conclusion text */}
       <div className="space-y-4 mb-8">
-        {section.content.map((line, i) => (
+        {(isHebrew ? (section.contentHe || section.content) : section.content).map((line, i) => (
           <motion.p
             key={i}
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.15 }}
-            className="text-parchment/90 text-lg leading-relaxed text-center"
+            className={`text-parchment/90 text-lg leading-relaxed text-center ${isHebrew ? 'font-hebrew' : ''}`}
           >
             {line}
           </motion.p>
@@ -145,13 +147,13 @@ export default function Nirtzah() {
                 className="overflow-hidden"
               >
                 <div className="p-5 space-y-3 border-t border-gold/10">
-                  {chadGadya.map((verse, i) => (
+                  {(isHebrew ? (chadGadyaHe || chadGadya) : chadGadya).map((verse, i) => (
                     <motion.p
                       key={i}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: i * 0.08 }}
-                      className="text-parchment/80 text-base leading-relaxed"
+                      className={`text-parchment/80 text-base leading-relaxed ${isHebrew ? 'font-hebrew' : ''}`}
                     >
                       {verse}
                     </motion.p>
@@ -194,7 +196,9 @@ export default function Nirtzah() {
                       <span className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center text-gold font-display text-sm shrink-0">
                         {item.number}
                       </span>
-                      <span className="text-parchment/80 text-base">{item.answer}</span>
+                      <span className={`text-parchment/80 text-base ${isHebrew ? 'font-hebrew' : ''}`}>
+                        {isHebrew ? (item.answerHe || item.answer) : item.answer}
+                      </span>
                     </motion.div>
                   ))}
                 </div>
@@ -204,15 +208,15 @@ export default function Nirtzah() {
         </div>
       </div>
 
-      {section.commentary && (
+      {(isHebrew ? (section.commentaryHe || section.commentary) : section.commentary) && (
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="mt-10 p-5 rounded-xl bg-gold/5 border border-gold/10 text-parchment/60 text-base"
         >
-          <span className="text-gold font-display text-sm tracking-wider block mb-1">COMMENTARY</span>
-          {section.commentary}
+          <span className="text-gold font-display text-sm tracking-wider block mb-1">{t('section.commentary')}</span>
+          {isHebrew ? (section.commentaryHe || section.commentary) : section.commentary}
         </motion.div>
       )}
     </div>

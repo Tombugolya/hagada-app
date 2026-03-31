@@ -154,10 +154,11 @@ function AppContent() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
-  // Sync translation lang
+  // Sync translation + narration lang
   useEffect(() => {
     setTranslationLang(lang);
-  }, [lang]);
+    narration.setLang(lang);
+  }, [lang, narration]);
 
   const setPage = useCallback((p: number, dir: number) => {
     if (p < 0 || p >= TOTAL_PAGES) return;

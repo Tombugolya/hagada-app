@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import type { Lang } from './LanguageContext';
 
 interface NarrationState {
   isPlaying: boolean;
@@ -7,35 +8,47 @@ interface NarrationState {
   voice: SpeechSynthesisVoice | null;
   availableVoices: SpeechSynthesisVoice[];
   currentText: string;
+  lang: Lang;
 }
 
-function pickBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+function pickBestVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynthesisVoice | null {
   if (voices.length === 0) return null;
 
-  // Ranked preference: natural-sounding voices on macOS/Chrome/Edge
-  const preferred = [
-    // macOS enhanced voices (very natural)
+  if (lang === 'he') {
+    // Hebrew voice preferences
+    const hePreferred = [
+      'Carmit', // macOS Hebrew voice
+      'he-IL', 'Hila', 'Avri',
+    ];
+    for (const name of hePreferred) {
+      const match = voices.find(v => v.name.includes(name));
+      if (match) return match;
+    }
+    // Any enhanced Hebrew voice
+    const enhanced = voices.find(v => v.name.includes('Enhanced') || v.name.includes('Premium'));
+    if (enhanced) return enhanced;
+    return voices[0];
+  }
+
+  // English voice preferences
+  const enPreferred = [
     'Samantha (Enhanced)', 'Samantha', 'Karen (Enhanced)', 'Karen',
     'Daniel (Enhanced)', 'Daniel',
-    // Chrome Google voices (natural)
     'Google UK English Female', 'Google UK English Male',
     'Google US English',
-    // Edge Microsoft voices
     'Microsoft Zira', 'Microsoft David',
   ];
 
-  for (const name of preferred) {
+  for (const name of enPreferred) {
     const match = voices.find(v => v.name.includes(name));
     if (match) return match;
   }
 
-  // Fallback: any voice with "Enhanced" or "Premium" in name
   const enhanced = voices.find(v =>
     v.name.includes('Enhanced') || v.name.includes('Premium') || v.name.includes('Natural')
   );
   if (enhanced) return enhanced;
 
-  // Last resort: default or first available
   return voices.find(v => v.default) || voices[0];
 }
 
@@ -47,31 +60,48 @@ export function useNarration() {
     voice: null,
     availableVoices: [],
     currentText: '',
+    lang: 'en',
   });
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const onEndRef = useRef<(() => void) | null>(null);
+  const allVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
 
+  // Load all voices once
   useEffect(() => {
     const loadVoices = () => {
-      const voices = speechSynthesis.getVoices();
-      const englishVoices = voices.filter(v => v.lang.startsWith('en'));
-      // Pick the best default voice: prefer enhanced/premium voices, then well-known natural ones
-      const bestVoice = pickBestVoice(englishVoices);
-      setState(prev => ({
-        ...prev,
-        availableVoices: englishVoices,
-        voice: prev.voice || bestVoice,
-      }));
+      allVoicesRef.current = speechSynthesis.getVoices();
+      // Filter for current language and pick best
+      updateVoicesForLang(state.lang);
     };
     loadVoices();
     speechSynthesis.onvoiceschanged = loadVoices;
     return () => { speechSynthesis.onvoiceschanged = null; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const updateVoicesForLang = useCallback((lang: Lang) => {
+    const allVoices = allVoicesRef.current;
+    const langPrefix = lang === 'he' ? 'he' : 'en';
+    const filtered = allVoices.filter(v => v.lang.startsWith(langPrefix));
+    const best = pickBestVoice(filtered, lang);
+    setState(prev => ({
+      ...prev,
+      lang,
+      availableVoices: filtered,
+      voice: best,
+    }));
+  }, []);
+
+  // Public method to switch language
+  const setLang = useCallback((lang: Lang) => {
+    updateVoicesForLang(lang);
+  }, [updateVoicesForLang]);
 
   const speak = useCallback((text: string, onEnd?: () => void) => {
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = state.rate;
+    utterance.lang = state.lang === 'he' ? 'he-IL' : 'en-US';
     if (state.voice) utterance.voice = state.voice;
     utterance.pitch = 1;
 
@@ -87,7 +117,7 @@ export function useNarration() {
     utteranceRef.current = utterance;
     setState(prev => ({ ...prev, isPlaying: true, isPaused: false, currentText: text }));
     speechSynthesis.speak(utterance);
-  }, [state.rate, state.voice]);
+  }, [state.rate, state.voice, state.lang]);
 
   const pause = useCallback(() => {
     speechSynthesis.pause();
@@ -120,5 +150,6 @@ export function useNarration() {
     stop,
     setRate,
     setVoice,
+    setLang,
   };
 }
