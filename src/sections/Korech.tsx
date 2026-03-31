@@ -4,6 +4,7 @@ import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import { t } from '../content/translations';
+import SectionImage from '../components/SectionImage';
 import { useLanguage } from '../hooks/LanguageContext';
 
 const layersEn = ['🫓 Matzah', '🥬 Maror', '🟫 Charoset', '🫓 Matzah'];
@@ -51,6 +52,7 @@ export default function Korech() {
         </button>
       </motion.div>
 
+      <SectionImage src="/images/generated/korech.png" alt="Hillel sandwich" />
       <SectionText {...sectionTextProps(section)} />
     </div>
   );

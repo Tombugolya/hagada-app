@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import { t } from '../content/translations';
 import { useLanguage } from '../hooks/LanguageContext';
+import SectionImage from '../components/SectionImage';
 import { useSoundEffect } from '../hooks/useSoundEffect';
 
 const HIDING_SPOTS = [
@@ -178,6 +179,8 @@ export default function Tzafun() {
           </button>
         </motion.div>
       )}
+
+      <SectionImage src="/images/generated/afikoman.png" alt="The hidden Afikoman" />
 
       <div className="mt-4">
         <div className="space-y-3">

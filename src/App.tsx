@@ -44,8 +44,8 @@ const sectionComponents: Record<string, React.ComponentType> = {
   nirtzah: Nirtzah,
 };
 
-// page 0 = hero, page 1 = checklist, pages 2-16 = seder steps, page 17 = footer
-const TOTAL_PAGES = sederSteps.length + 3;
+// page 0 = hero, pages 1-15 = seder steps, page 16 = footer
+const TOTAL_PAGES = sederSteps.length + 2;
 
 const pageVariants = {
   enter: (direction: number) => ({
@@ -66,11 +66,10 @@ function PageNav({
   page: number;
   setPage: (p: number, dir: number) => void;
 }) {
-  const stepIndex = page - 2; // page 0=hero, 1=checklist, 2+=seder steps
+  const stepIndex = page - 1;
   const step = stepIndex >= 0 ? sederSteps[stepIndex] : undefined;
   const { isHebrew } = useLanguage();
   const progress = page / (TOTAL_PAGES - 1);
-  const isChecklist = page === 1;
 
   const backArrow = isHebrew ? '→' : '←';
   const nextArrow = isHebrew ? '←' : '→';
@@ -108,8 +107,6 @@ function PageNav({
                 </p>
                 <p className="text-parchment/30 text-xs">{step.number} {t('nav.stepOf')}</p>
               </div>
-            ) : isChecklist ? (
-              <p className="text-gold text-base font-display">📋 {isHebrew ? 'הכנות' : 'Checklist'}</p>
             ) : page === 0 ? (
               <p className="text-parchment/40 text-sm">{t('nav.haggadah')}</p>
             ) : (
@@ -127,11 +124,7 @@ function PageNav({
                     ? 'w-6 h-2 bg-gold'
                     : 'w-2 h-2 bg-white/15 hover:bg-white/30'
                 }`}
-                title={
-                  i === 0 ? 'Home' :
-                  i === 1 ? 'Checklist' :
-                  i <= sederSteps.length + 1 ? sederSteps[i - 2].transliteration : 'End'
-                }
+                title={i === 0 ? 'Home' : i <= sederSteps.length ? sederSteps[i - 1].transliteration : 'End'}
               />
             ))}
           </div>
@@ -161,6 +154,7 @@ function AppContent() {
   const [direction, setDirection] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const [checklistOpen, setChecklistOpen] = useState(false);
 
   // Sync translation + narration lang
   useEffect(() => {
@@ -206,7 +200,7 @@ function AppContent() {
     }
   }, [page, setPage]);
 
-  const stepIndex = page - 2; // page 0=hero, 1=checklist, 2+=seder steps
+  const stepIndex = page - 1;
   const step = stepIndex >= 0 ? sederSteps[stepIndex] : undefined;
   const SectionComponent = step ? sectionComponents[step.id] : null;
 
@@ -217,7 +211,7 @@ function AppContent() {
       onTouchEnd={handleTouchEnd}
     >
       <Starfield />
-      <TopBar narration={narration} />
+      <TopBar narration={narration} onChecklistToggle={() => setChecklistOpen(o => !o)} />
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto overflow-x-hidden mt-14 -webkit-overflow-scrolling-touch">
 
@@ -255,21 +249,6 @@ function AppContent() {
               {t('hero.begin')}
             </motion.button>
           </motion.section>
-        )}
-
-        {page === 1 && (
-          <motion.div
-            key="checklist"
-            custom={direction}
-            variants={pageVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="relative z-10"
-          >
-            <Checklist />
-          </motion.div>
         )}
 
         {step && SectionComponent && (
@@ -327,6 +306,43 @@ function AppContent() {
       </div>
 
       <PageNav page={page} setPage={setPage} />
+
+      {/* Checklist slide-out panel */}
+      <AnimatePresence>
+        {checklistOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setChecklistOpen(false)}
+              className="fixed inset-0 bg-black/50 z-[60]"
+            />
+            {/* Panel */}
+            <motion.div
+              initial={{ x: isHebrew ? '-100%' : '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: isHebrew ? '-100%' : '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className={`fixed top-0 bottom-0 ${isHebrew ? 'left-0' : 'right-0'} w-full max-w-md bg-midnight border-gold/10 z-[70] overflow-y-auto ${isHebrew ? 'border-r' : 'border-l'}`}
+            >
+              <div className="sticky top-0 bg-midnight/90 backdrop-blur-md border-b border-gold/10 px-4 py-3 flex items-center justify-between z-10">
+                <h2 className="font-display text-gold text-base">
+                  📋 {isHebrew ? 'רשימת הכנות לפסח' : 'Pesach Checklist'}
+                </h2>
+                <button
+                  onClick={() => setChecklistOpen(false)}
+                  className="text-parchment/50 hover:text-gold text-xl p-1"
+                >
+                  ✕
+                </button>
+              </div>
+              <Checklist />
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

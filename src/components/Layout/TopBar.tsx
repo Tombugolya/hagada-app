@@ -16,11 +16,12 @@ interface TopBarProps {
     setRate: (rate: number) => void;
     setVoice: (voice: SpeechSynthesisVoice) => void;
   };
+  onChecklistToggle?: () => void;
 }
 
 const rates = [0.5, 0.75, 1, 1.25, 1.5];
 
-export default function TopBar({ narration }: TopBarProps) {
+export default function TopBar({ narration, onChecklistToggle }: TopBarProps) {
   const [showControls, setShowControls] = useState(false);
   const { lang, toggleLang } = useLanguage();
 
@@ -65,6 +66,17 @@ export default function TopBar({ narration }: TopBarProps) {
                 ⏹
               </button>
             </motion.div>
+          )}
+
+          {/* Checklist */}
+          {onChecklistToggle && (
+            <button
+              onClick={onChecklistToggle}
+              className="text-parchment/60 active:text-gold hover:text-gold transition-colors text-lg p-1"
+              title={lang === 'he' ? 'רשימת הכנות' : 'Preparation checklist'}
+            >
+              📋
+            </button>
           )}
 
           {/* Language toggle */}

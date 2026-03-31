@@ -5,6 +5,7 @@ import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import { useSoundEffect } from '../hooks/useSoundEffect';
+import SectionImage from '../components/SectionImage';
 
 export default function Yachatz() {
   const section = haggadahText['yachatz'];
@@ -88,6 +89,7 @@ export default function Yachatz() {
         </div>
       </motion.div>
 
+      <SectionImage src="/images/generated/yachatz.png" alt="Breaking the matzah" />
       <SectionText {...sectionTextProps(section)} />
     </div>
   );

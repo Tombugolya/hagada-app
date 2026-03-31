@@ -4,6 +4,7 @@ import { fourQuestionsQuiz } from '../../content/haggadah';
 import { t } from '../../content/translations';
 import { useLanguage } from '../../hooks/LanguageContext';
 import { useSoundEffect } from '../../hooks/useSoundEffect';
+import SectionImage from '../../components/SectionImage';
 
 // Shuffle once per question index, not on every render
 function shuffleArray<T>(arr: T[]): T[] {
@@ -83,6 +84,7 @@ export default function FourQuestions() {
       <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1">{t('fourQ.title')}</h3>
       {!isHebrew && <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">מַה נִּשְׁתַּנָּה</p>}
       <p className="text-center text-parchment/50 text-xs sm:text-sm mb-4 sm:mb-8">{t('fourQ.subtitle')}</p>
+      <SectionImage src="/images/generated/four-questions.png" alt="A child asking the Four Questions" />
 
       {/* Progress dots */}
       <div className="flex justify-center gap-2 mb-8">

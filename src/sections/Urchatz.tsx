@@ -4,6 +4,7 @@ import { haggadahText } from '../content/haggadah';
 import { t } from '../content/translations';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
+import SectionImage from '../components/SectionImage';
 interface Droplet {
   id: number;
   x: number;
@@ -187,6 +188,7 @@ export default function Urchatz() {
         animate={{ opacity: washComplete ? 1 : 0.4, y: 0 }}
         transition={{ delay: 0.6, duration: 0.6 }}
       >
+        <SectionImage src="/images/generated/urchatz.png" alt="Washing hands" />
         <SectionText {...sectionTextProps(section)} />
       </motion.div>
     </motion.div>

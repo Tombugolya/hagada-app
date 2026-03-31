@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { fourSons } from '../../content/haggadah';
 import { t } from '../../content/translations';
 import { useLanguage } from '../../hooks/LanguageContext';
+import SectionImage from '../../components/SectionImage';
 
 export default function FourSons() {
   const [flipped, setFlipped] = useState<Record<number, boolean>>({});
@@ -22,6 +23,7 @@ export default function FourSons() {
       <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1 sm:mb-2">{t('fourSons.title')}</h3>
       <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">אַרְבָּעָה בָנִים</p>
       <p className="text-center text-parchment/50 text-xs sm:text-sm mb-6 sm:mb-10">{t('fourSons.tapToReveal')}</p>
+      <SectionImage src="/images/generated/four-sons.png" alt="The Four Sons" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {fourSons.map((son, i) => (

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../hooks/LanguageContext';
+import SectionImage from '../components/SectionImage';
 
 interface ChecklistItem {
   id: string;
@@ -129,7 +130,7 @@ export default function Checklist() {
             <span>{checkedCount}/{totalItems}</span>
             <span>{Math.round(progress)}%</span>
           </div>
-          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+          <div className="h-2 bg-white/5 rounded-full overflow-hidden" style={{ direction: 'ltr' }}>
             <motion.div
               className="h-full bg-gold/70 rounded-full"
               animate={{ width: `${progress}%` }}
@@ -157,6 +158,8 @@ export default function Checklist() {
         )}
       </motion.div>
 
+      <SectionImage src="/images/generated/seder-plate.png" alt="Seder plate" />
+
       {/* Categories */}
       <div className="space-y-6">
         {categories.map((cat, ci) => {
@@ -173,7 +176,7 @@ export default function Checklist() {
                 allDone ? 'bg-gold/5 border-gold/20' : 'bg-white/3 border-white/10'
               }`}
             >
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-3" style={{ direction: isHebrew ? 'rtl' : 'ltr' }}>
                 <span className="text-xl">{cat.emoji}</span>
                 <h3 className={`font-display text-lg text-gold ${allDone ? 'line-through opacity-60' : ''}`}>
                   {isHebrew ? cat.titleHe : cat.titleEn}
@@ -188,7 +191,8 @@ export default function Checklist() {
                     <button
                       key={item.id}
                       onClick={() => toggle(item.id)}
-                      className={`w-full flex items-center gap-3 p-2.5 rounded-lg text-left transition-all ${
+                      style={{ direction: isHebrew ? 'rtl' : 'ltr' }}
+                      className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all ${
                         isChecked
                           ? 'bg-gold/10 text-parchment/50'
                           : 'hover:bg-white/5 active:bg-white/8 text-parchment/80'
@@ -200,7 +204,7 @@ export default function Checklist() {
                         {isChecked && <span className="text-midnight text-xs">✓</span>}
                       </div>
                       <span className="text-lg">{item.emoji}</span>
-                      <span className={`text-sm flex-1 ${isChecked ? 'line-through' : ''} ${isHebrew ? 'font-hebrew' : ''}`}>
+                      <span className={`text-sm flex-1 text-start ${isChecked ? 'line-through' : ''} ${isHebrew ? 'font-hebrew' : ''}`}>
                         {isHebrew ? item.he : item.en}
                       </span>
                     </button>
