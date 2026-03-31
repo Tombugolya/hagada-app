@@ -26,8 +26,15 @@
 
 html {
   scroll-behavior: smooth;
-  /* Prevent iOS overscroll bounce */
   overscroll-behavior: none;
+  /* Larger base font on mobile — Tailwind rem sizes scale with this */
+  font-size: 19px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 body {
@@ -37,7 +44,6 @@ body {
   color: var(--color-parchment);
   font-family: var(--font-serif);
   overflow-x: hidden;
-  /* Prevent text size adjust on orientation change */
   -webkit-text-size-adjust: 100%;
 }
 
