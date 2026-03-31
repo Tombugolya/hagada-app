@@ -751,10 +751,12 @@ export default function TenPlagues() {
                 </motion.span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1 sm:gap-2 mb-0.5 flex-wrap">
-                    <span className="text-parchment font-display text-sm sm:text-base">{plague.english}</span>
+                    {!isHebrew && <span className="text-parchment font-display text-sm sm:text-base">{plague.english}</span>}
                     <span className="hebrew-text text-gold-light/70 text-xs sm:text-sm">{plague.hebrew}</span>
                   </div>
-                  <p className="text-parchment/50 text-xs sm:text-sm hidden sm:block">{plague.description}</p>
+                  <p className={`text-parchment/50 text-xs sm:text-sm hidden sm:block ${isHebrew ? 'font-hebrew' : ''}`}>
+                    {isHebrew ? (plague.descriptionHe || plague.description) : plague.description}
+                  </p>
                 </div>
                 {isActive && !isAnimating && <span className="text-wine text-lg">✓</span>}
               </motion.button>

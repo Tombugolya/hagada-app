@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { dayenuVerses } from '../../content/haggadah';
 import { t } from '../../content/translations';
+import { useLanguage } from '../../hooks/LanguageContext';
 import SectionImage from '../../components/SectionImage';
 
 export default function Dayenu() {
   const [activeVerse, setActiveVerse] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { isHebrew } = useLanguage();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const toggleSingAlong = () => {
@@ -79,11 +81,13 @@ export default function Dayenu() {
                 : 'bg-white/3 border-white/5'
             }`}
           >
-            <p className={`text-base transition-colors ${
-              activeVerse === i ? 'text-parchment' : 'text-parchment/70'
-            }`}>
-              {verse.english}
-            </p>
+            {!isHebrew && (
+              <p className={`text-base transition-colors ${
+                activeVerse === i ? 'text-parchment' : 'text-parchment/70'
+              }`}>
+                {verse.english}
+              </p>
+            )}
             <p className={`hebrew-text text-sm mt-1 transition-colors ${
               activeVerse === i ? 'text-gold-light' : 'text-gold-light/40'
             }`}>

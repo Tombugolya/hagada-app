@@ -6,14 +6,14 @@ import { useLanguage } from '../hooks/LanguageContext';
 import { useSoundEffect } from '../hooks/useSoundEffect';
 
 const HIDING_SPOTS = [
-  { id: 'cushion', label: 'Under the cushion', x: 10, y: 60, w: 25, h: 20, emoji: '🛋️' },
-  { id: 'bookshelf', label: 'Behind the books', x: 70, y: 10, w: 25, h: 25, emoji: '📚' },
-  { id: 'plant', label: 'Behind the plant', x: 5, y: 10, w: 20, h: 30, emoji: '🪴' },
-  { id: 'table', label: 'Under the table', x: 35, y: 45, w: 30, h: 25, emoji: '🍽️' },
-  { id: 'curtain', label: 'Behind the curtain', x: 75, y: 40, w: 20, h: 35, emoji: '🪟' },
-  { id: 'cabinet', label: 'In the cabinet', x: 40, y: 5, w: 25, h: 20, emoji: '🗄️' },
-  { id: 'rug', label: 'Under the rug', x: 30, y: 75, w: 30, h: 15, emoji: '🟫' },
-  { id: 'chair', label: 'Behind the chair', x: 65, y: 60, w: 20, h: 25, emoji: '🪑' },
+  { id: 'cushion', label: 'Under the cushion', labelHe: 'מתחת לכרית', x: 10, y: 60, w: 25, h: 20, emoji: '🛋️' },
+  { id: 'bookshelf', label: 'Behind the books', labelHe: 'מאחורי הספרים', x: 70, y: 10, w: 25, h: 25, emoji: '📚' },
+  { id: 'plant', label: 'Behind the plant', labelHe: 'מאחורי הצמח', x: 5, y: 10, w: 20, h: 30, emoji: '🪴' },
+  { id: 'table', label: 'Under the table', labelHe: 'מתחת לשולחן', x: 35, y: 45, w: 30, h: 25, emoji: '🍽️' },
+  { id: 'curtain', label: 'Behind the curtain', labelHe: 'מאחורי הווילון', x: 75, y: 40, w: 20, h: 35, emoji: '🪟' },
+  { id: 'cabinet', label: 'In the cabinet', labelHe: 'בתוך הארון', x: 40, y: 5, w: 25, h: 20, emoji: '🗄️' },
+  { id: 'rug', label: 'Under the rug', labelHe: 'מתחת לשטיח', x: 30, y: 75, w: 30, h: 15, emoji: '🟫' },
+  { id: 'chair', label: 'Behind the chair', labelHe: 'מאחורי הכיסא', x: 65, y: 60, w: 20, h: 25, emoji: '🪑' },
 ];
 
 function getDistance(x1: number, y1: number, x2: number, y2: number) {
@@ -118,7 +118,7 @@ export default function Tzafun() {
               whileTap={!found && !isSearched ? { scale: 0.95 } : {}}
             >
               <span className="text-xl sm:text-2xl md:text-3xl">{spot.emoji}</span>
-              <span className="text-[8px] sm:text-[10px] md:text-xs text-parchment/40 mt-0.5 leading-tight text-center">{spot.label}</span>
+              <span className="text-[8px] sm:text-[10px] md:text-xs text-parchment/40 mt-0.5 leading-tight text-center">{isHebrew ? spot.labelHe : spot.label}</span>
               {isFound && <span className="text-xl mt-1">🫓</span>}
             </motion.button>
           );

@@ -3,15 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
+import { t } from '../content/translations';
+import { useLanguage } from '../hooks/LanguageContext';
+
+const layersEn = ['🫓 Matzah', '🥬 Maror', '🟫 Charoset', '🫓 Matzah'];
+const layersHe = ['🫓 מצה', '🥬 מרור', '🟫 חרוסת', '🫓 מצה'];
 
 export default function Korech() {
   const section = haggadahText['korech'];
   const [step, setStep] = useState(0);
-  const layers = ['🫓 Matzah', '🥬 Maror', '🟫 Charoset', '🫓 Matzah'];
+  const { isHebrew } = useLanguage();
+  const layers = isHebrew ? layersHe : layersEn;
 
   return (
     <div className="max-w-2xl mx-auto">
-      {/* Sandwich assembly */}
       <motion.div
         className="flex flex-col items-center mb-10"
         initial={{ opacity: 0 }}
@@ -42,7 +47,7 @@ export default function Korech() {
               : 'bg-white/10 text-parchment/70 hover:bg-white/15 cursor-pointer'
           }`}
         >
-          {step >= layers.length ? '🥪 Sandwich complete!' : `Add ${layers[step]}`}
+          {step >= layers.length ? `🥪 ${t('korech.complete')}` : `${t('korech.addLayer', { layer: layers[step] })}`}
         </button>
       </motion.div>
 

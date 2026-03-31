@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { fourSons } from '../../content/haggadah';
 import { t } from '../../content/translations';
+import { useLanguage } from '../../hooks/LanguageContext';
 
 export default function FourSons() {
   const [flipped, setFlipped] = useState<Record<number, boolean>>({});
+  const { isHebrew } = useLanguage();
 
   const toggleFlip = (idx: number) => {
     setFlipped(prev => ({ ...prev, [idx]: !prev[idx] }));
@@ -40,9 +42,11 @@ export default function FourSons() {
               <div className="absolute inset-0 backface-hidden">
                 <div className={`h-full p-4 sm:p-6 rounded-2xl bg-gradient-to-br ${son.color} border border-gold/15 flex flex-col items-center justify-center text-center`}>
                   <div className="text-3xl sm:text-5xl mb-2 sm:mb-3">{son.icon}</div>
-                  <h4 className="font-display text-base sm:text-xl text-gold mb-1">{son.type}</h4>
+                  {!isHebrew && <h4 className="font-display text-base sm:text-xl text-gold mb-1">{son.type}</h4>}
                   <p className="hebrew-text text-gold-light/70 text-sm sm:text-lg mb-2 sm:mb-4">{son.hebrew}</p>
-                  <p className="text-parchment/80 text-sm sm:text-base italic">{son.question}</p>
+                  <p className={`text-parchment/80 text-sm sm:text-base italic ${isHebrew ? 'font-hebrew' : ''}`}>
+                    {isHebrew ? (son.questionHe || son.question) : son.question}
+                  </p>
                   <p className="text-gold/40 text-[10px] sm:text-xs mt-2 sm:mt-4 animate-pulse">{t('fourSons.tapToFlip')}</p>
                 </div>
               </div>
@@ -52,7 +56,9 @@ export default function FourSons() {
                 <div className={`h-full p-4 sm:p-6 rounded-2xl bg-gradient-to-br ${son.color} border border-gold/25 flex flex-col justify-center`}>
                   <div className="text-2xl sm:text-3xl text-center mb-2 sm:mb-3">{son.icon}</div>
                   <h4 className="font-display text-base sm:text-lg text-gold mb-2 sm:mb-3 text-center">{t('fourSons.response')}</h4>
-                  <p className="text-parchment/90 text-sm sm:text-base leading-relaxed">{son.response}</p>
+                  <p className={`text-parchment/90 text-sm sm:text-base leading-relaxed ${isHebrew ? 'font-hebrew' : ''}`}>
+                    {isHebrew ? (son.responseHe || son.response) : son.response}
+                  </p>
                   <p className="text-gold/40 text-[10px] sm:text-xs mt-2 sm:mt-4 text-center animate-pulse">{t('fourSons.tapBack')}</p>
                 </div>
               </div>

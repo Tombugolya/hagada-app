@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { haggadahText } from '../content/haggadah';
 import { t } from '../content/translations';
+import { useLanguage } from '../hooks/LanguageContext';
 import SectionText from '../components/SectionText';
 import { sectionTextProps } from '../content/sectionHelper';
 import WineCup from '../components/WineCup';
@@ -10,6 +11,7 @@ import SectionImage from '../components/SectionImage';
 export default function Barech() {
   const section = haggadahText['barech'];
   const [doorOpen, setDoorOpen] = useState(false);
+  const { isHebrew } = useLanguage();
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -86,9 +88,11 @@ export default function Barech() {
             className="mt-6 p-5 rounded-xl bg-white/5 border border-gold/15 text-center"
           >
             <p className="hebrew-text text-gold-light text-xl">{section.hebrewContent[0]}</p>
-            <p className="text-parchment/70 text-sm mt-2 italic">
-              Elijah the Prophet, may he come speedily in our days, with the Messiah, son of David.
-            </p>
+            {!isHebrew && (
+              <p className="text-parchment/70 text-sm mt-2 italic">
+                Elijah the Prophet, may he come speedily in our days, with the Messiah, son of David.
+              </p>
+            )}
           </motion.div>
         )}
       </motion.div>
