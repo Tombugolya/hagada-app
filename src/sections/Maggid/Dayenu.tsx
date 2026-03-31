@@ -98,7 +98,7 @@ export default function Dayenu() {
               animate={activeVerse === i ? { scale: [1, 1.15, 1], opacity: [0.5, 1, 0.5] } : {}}
               transition={{ duration: 1, repeat: Infinity }}
             >
-              {activeVerse === i && 'DAYENU! דַּיֵּנוּ'}
+              {activeVerse === i && (isHebrew ? '!דַּיֵּנוּ' : 'DAYENU! דַּיֵּנוּ')}
             </motion.p>
           </motion.div>
         ))}

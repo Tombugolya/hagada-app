@@ -43,9 +43,18 @@ export default function PesachMatzahMaror() {
             >
               {sym.icon}
             </motion.div>
-            <p className="font-display text-gold text-lg">{isHebrew ? sym.nameHe : sym.name}</p>
-            <p className="hebrew-text text-gold-light/60 text-base">{sym.hebrew}</p>
-            <p className="text-parchment/50 text-xs mt-1">{isHebrew ? sym.descriptionHe : sym.description}</p>
+            {isHebrew ? (
+              <>
+                <p className="font-hebrew text-gold text-lg">{sym.nameHe}</p>
+                <p className="text-parchment/50 text-xs mt-1">{sym.descriptionHe}</p>
+              </>
+            ) : (
+              <>
+                <p className="font-display text-gold text-lg">{sym.name}</p>
+                <p className="hebrew-text text-gold-light/60 text-base">{sym.hebrew}</p>
+                <p className="text-parchment/50 text-xs mt-1">{sym.description}</p>
+              </>
+            )}
           </motion.div>
         ))}
       </div>

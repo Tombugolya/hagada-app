@@ -704,7 +704,7 @@ export default function TenPlagues() {
             )}
           </AnimatePresence>
 
-          <p className="text-gold/50 text-sm mt-2">{activated.size}/10 plagues</p>
+          <p className="text-gold/50 text-sm mt-2">{t('plagues.count', { n: activated.size })}</p>
 
           {/* Seder plate for drops */}
           <div className="mt-2 flex flex-wrap gap-1 justify-center max-w-[120px]">

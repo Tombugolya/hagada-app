@@ -81,7 +81,7 @@ export default function FourQuestions() {
       className="max-w-2xl mx-auto"
     >
       <h3 className="font-display text-xl sm:text-2xl text-gold text-center mb-1">{t('fourQ.title')}</h3>
-      <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">מַה נִּשְׁתַּנָּה</p>
+      {!isHebrew && <p className="hebrew-text text-center text-gold-light/80 text-lg sm:text-xl mb-1 sm:mb-2">מַה נִּשְׁתַּנָּה</p>}
       <p className="text-center text-parchment/50 text-xs sm:text-sm mb-4 sm:mb-8">{t('fourQ.subtitle')}</p>
 
       {/* Progress dots */}

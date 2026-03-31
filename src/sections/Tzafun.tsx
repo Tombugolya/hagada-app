@@ -85,7 +85,9 @@ export default function Tzafun() {
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-6">
         <p className="text-parchment/40 text-xs mb-4">
-          {!found && `Time: ${(elapsed / 1000).toFixed(1)}s | Searched: ${searched.size}/${HIDING_SPOTS.length}`}
+          {!found && (isHebrew
+            ? `${(elapsed / 1000).toFixed(1)} :זמן | ${searched.size}/${HIDING_SPOTS.length} :חיפושים`
+            : `Time: ${(elapsed / 1000).toFixed(1)}s | Searched: ${searched.size}/${HIDING_SPOTS.length}`)}
         </p>
       </div>
 
@@ -164,7 +166,9 @@ export default function Tzafun() {
           <div className="text-4xl mb-2">🎉</div>
           <h4 className="font-display text-2xl text-gold mb-1">{t('tzafun.found')}</h4>
           <p className="text-parchment/70 mb-4">
-            Found in {(elapsed / 1000).toFixed(1)} seconds with {searched.size} searches
+            {isHebrew
+              ? `נמצא תוך ${(elapsed / 1000).toFixed(1)} שניות עם ${searched.size} חיפושים`
+              : `Found in ${(elapsed / 1000).toFixed(1)} seconds with ${searched.size} searches`}
           </p>
           <button
             onClick={reset}
