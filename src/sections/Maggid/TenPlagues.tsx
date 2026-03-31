@@ -244,13 +244,13 @@ function BloodEffect() {
 }
 
 function FrogsEffect() {
-  // Frogs bouncing across the screen
-  const frogs = Array.from({ length: 15 }, (_, i) => ({
+  // Frogs hopping up and landing back down
+  const frogs = Array.from({ length: 7 }, (_, i) => ({
     id: i,
-    startX: Math.random() * 80 + 10,
-    startY: 70 + Math.random() * 20,
-    size: 24 + Math.random() * 28,
-    delay: Math.random() * 0.5,
+    startX: 10 + Math.random() * 70,
+    size: 28 + Math.random() * 20,
+    delay: i * 0.3 + Math.random() * 0.2,
+    hopX: (Math.random() - 0.5) * 60,
   }));
 
   return (
@@ -259,16 +259,21 @@ function FrogsEffect() {
         <motion.div
           key={f.id}
           className="absolute"
-          style={{ fontSize: f.size, left: `${f.startX}%`, top: `${f.startY}%` }}
-          initial={{ opacity: 0, scale: 0 }}
+          style={{ fontSize: f.size, left: `${f.startX}%`, bottom: '10%' }}
+          initial={{ opacity: 0 }}
           animate={{
-            opacity: [0, 1, 1, 0],
-            scale: [0, 1.2, 1, 0.8],
-            y: [0, -150, -80, -200],
-            x: [0, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 150],
-            rotate: [0, -15, 15, -10],
+            opacity: [0, 1, 1, 1, 1, 0],
+            y: [0, -120, -10, -90, -5, 0],
+            x: [0, f.hopX * 0.4, f.hopX * 0.6, f.hopX * 0.8, f.hopX, f.hopX * 1.1],
+            rotate: [0, -10, 5, -8, 3, 0],
+            scale: [0.5, 1.1, 1, 1.1, 1, 0.8],
           }}
-          transition={{ duration: 2.5, delay: f.delay, ease: 'easeOut' }}
+          transition={{
+            duration: 3.5,
+            delay: f.delay,
+            ease: 'easeInOut',
+            times: [0, 0.2, 0.35, 0.55, 0.75, 1],
+          }}
         >
           🐸
         </motion.div>
